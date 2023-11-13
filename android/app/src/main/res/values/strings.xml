@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appwidget_text">Suraj</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <!-- Add the following string resource -->
+    <string name="select_option">Select an Option</string>
+    <string-array name="widget_options">
+        <item>Java</item>
+    </string-array>
+</resources>
