@@ -5,26 +5,14 @@
     android:theme="@style/Theme.Android.AppWidgetContainer"
     
     >
-
-    <!-- <TextView
-        android:id="@+id/appwidget_text"
-        style="@style/Widget.Android.AppWidget.InnerView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" /> -->
-   
-
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:orientation="vertical">
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,8 +38,6 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Large" />
 
         </LinearLayout>
-
-        
 
         <LinearLayout
                 android:layout_width="wrap_content"

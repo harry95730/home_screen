@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.suraj"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -67,4 +67,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+        implementation 'com.google.code.gson:gson:2.10' 
+}

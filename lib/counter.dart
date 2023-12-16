@@ -10,6 +10,8 @@ Future<void> interactiveCallback(Uri? uri) async {
   await HomeWidget.setAppGroupId('group.es.antonborri.homeWidgetCounter');
 
   String val = uri.toString().split('_')[1];
+  val = Uri.decodeComponent(val);
+
   if (uri?.host.split('_')[0] == 'increment') {
     await _incremenBac(val);
   } else if (uri?.host.split('_')[0] == 'clear') {
@@ -73,17 +75,18 @@ Future<void> _clear(String countKey) async {
 /// Stores [value] in the Widget Configuration
 Future<void> _sendAndUpdate(String countKey, [int? value]) async {
   await HomeWidget.saveWidgetData(countKey, value);
+
   await HomeWidget.updateWidget(
-    iOSName: 'CounterWidget',
     androidName: 'NewAppWidget',
+    iOSName: 'CounterWidget',
   );
 }
 
 Future<void> _sendAndUpdatestepsize(String countKey, [int? value]) async {
   await HomeWidget.saveWidgetData('${countKey}stepsize', value);
   await HomeWidget.updateWidget(
-    iOSName: 'CounterWidget',
     androidName: 'NewAppWidget',
+    iOSName: 'CounterWidget',
   );
 }
 

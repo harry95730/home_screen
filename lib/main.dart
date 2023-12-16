@@ -7,7 +7,8 @@ import 'counter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HomeWidget.setAppGroupId('group.es.antonborri.homeWidgetCounter');
-  await HomeWidget.registerBackgroundCallback(interactiveCallback);
+
+  await HomeWidget.registerInteractivityCallback(interactiveCallback);
   runApp(const MyApp());
 }
 

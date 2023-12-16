@@ -26,11 +26,13 @@
         android:text="@string/add_widget" />
 
     <Spinner
-    android:id="@+id/spinner_options"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:entries="@array/widget_options"
-    android:prompt="@string/select_option" />
+        android:id="@+id/spinner_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:entries="@array/widget_options"
+        android:prompt="@string/select_option" />
+        
+
 
 </LinearLayout>

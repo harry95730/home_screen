@@ -1,5 +1,4 @@
 package com.example.suraj
-
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -14,6 +13,9 @@ import android.util.Log
 import android.widget.*
 import android.widget.RemoteViews
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 
 
 class NewAppWidgetConfigureActivity : Activity() {
@@ -67,10 +69,17 @@ class NewAppWidgetConfigureActivity : Activity() {
         // appWidgetText = binding.appwidgetText as EditText
         binding.addButton.setOnClickListener(onClickListener)
         spinner = findViewById(R.id.spinner_options)
-        // val optionsArray = arrayOf("Suraj", "Kumar")
-        val sharedPreference = getvalue(context,"myStringList")
-        var optionsArray = sharedPreference.split("|").toTypedArray()
+        //val sharedPreference = getvalue(context,"myStringList")
+        //var optionsArray = sharedPreference.split("|").toTypedArray()
+        val sharedPreference = getvalue(context,"mapKey")
+        
+        val mapString = sharedPreference.split("|")[0] 
+        val mapType = object : TypeToken<Map<String, Any>>() {}.type
+        val gson = Gson()
+        val map: Map<String, Any> = gson.fromJson(mapString, mapType)
 
+        val optionsArray = map.keys.toList()
+        
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, optionsArray)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = arrayAdapter
