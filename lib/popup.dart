@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rrule_generator/rrule_generator.dart';
 import 'package:suraj/classforfunctios.dart';
 import 'package:suraj/decorate.dart';
-import 'package:suraj/main.dart';
+import 'package:suraj/home_page.dart';
 import 'package:suraj/measurable.dart';
 import 'package:suraj/yesno.dart';
 import 'package:textfield_tags/textfield_tags.dart';
@@ -381,7 +381,7 @@ class Fur {
                 'RRULE:FREQ=WEEKLY;UNTIL=20231211T000000;INTERVAL=1;BYDAY=MO',
             textDelegate: const EnglishRRuleTextDelegate(),
             onChange: (value) {
-              print('value :${value.toString()}');
+              //print('value :${value.toString()}');
             },
           ),
         ),
