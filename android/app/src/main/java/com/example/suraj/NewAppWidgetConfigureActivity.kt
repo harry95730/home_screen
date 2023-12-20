@@ -24,9 +24,7 @@ class NewAppWidgetConfigureActivity : Activity() {
     private lateinit var spinner: Spinner
     private var onClickListener = View.OnClickListener {
         val context = this@NewAppWidgetConfigureActivity
-
         // When the button is clicked, store the string locally
-
         spinner = findViewById(R.id.spinner_options)
         // Get the selected item from the spinner
         val selectedOption = spinner.selectedItem.toString()

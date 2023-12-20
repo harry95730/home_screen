@@ -216,35 +216,49 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     children: [
                       SizedBox(
                         width: 100,
-                        child: TextField(
-                          controller: textController,
-                          decoration: InputDecoration(
-                            hintText: '1',
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            filled: true,
-                            fillColor: Colors.grey[200],
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                if (textController.text.isNotEmpty) {
-                                  _sendAndUpdatestepsize(widget.title,
-                                      int.parse(textController.text));
-                                } else {
-                                  _sendAndUpdatestepsize(widget.title, 1);
-                                  textController.text = '1';
-                                }
-                                FocusScope.of(context).unfocus();
-                              },
-                              icon: const Icon(
-                                Icons.add_task,
-                                size: 18,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ),
-                          onChanged: (value) {},
+                        child: FutureBuilder<int>(
+                          future: _stepvalue(widget.title),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              textController.text =
+                                  snapshot.data?.toString() ?? '';
+                              return TextField(
+                                controller: textController,
+                                decoration: InputDecoration(
+                                  hintText: '1',
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 10),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.grey[200],
+                                  suffixIcon: IconButton(
+                                    onPressed: () async {
+                                      if (textController.text.isNotEmpty) {
+                                        _sendAndUpdatestepsize(widget.title,
+                                            int.parse(textController.text));
+                                      } else {
+                                        _sendAndUpdatestepsize(widget.title, 1);
+                                        textController.text = '1';
+                                      }
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    icon: const Icon(
+                                      Icons.add_task,
+                                      size: 18,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ],

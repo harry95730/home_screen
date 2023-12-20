@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:suraj/classforfunctios.dart';
@@ -177,7 +179,10 @@ class _StartState extends State<Start> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await _addCounter();
+          //await Fur().addTodo(context, '');
+          //f(pickLanguage[selectednumber], selectednumber);
+          await Fur().showYesNoDialog(context);
+
           setState(() {});
         },
         tooltip: 'Add Counter',
@@ -186,7 +191,8 @@ class _StartState extends State<Start> {
     );
   }
 
-  Future<void> _addCounter() async {
-    await Fur().addTodo(context, '');
+  Color selectedColor = Colors.blue;
+  void changeColor(Color color) {
+    setState(() => selectedColor = color);
   }
 }
