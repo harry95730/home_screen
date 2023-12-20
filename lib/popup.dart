@@ -380,12 +380,12 @@ class Fur {
             initialRRule:
                 'RRULE:FREQ=WEEKLY;UNTIL=20231211T000000;INTERVAL=1;BYDAY=MO',
             textDelegate: const EnglishRRuleTextDelegate(),
-            onChange: print,
+            onChange: (value) {
+              print('value :${value.toString()}');
+            },
           ),
         ),
       ),
     );
   }
-
-  void frequencyfil() {}
 }

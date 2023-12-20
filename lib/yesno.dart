@@ -18,6 +18,7 @@ class _YesorNoState extends State<YesorNo> {
   AnalogClockController analogClockController1 = AnalogClockController();
   String s2 = 'Off';
   String s3 = 'Everyday';
+  String s4 = 'Everyday';
   ColorSwatch? _tempMainColor;
   Color? _tempShadeColor;
   ColorSwatch? _mainColor = Colors.blue;
@@ -140,7 +141,7 @@ class _YesorNoState extends State<YesorNo> {
             padding: const EdgeInsets.all(8.0),
             child: Deco().frequencyfil(
               'Frequency',
-              s2,
+              s4,
               context,
             ),
           ),

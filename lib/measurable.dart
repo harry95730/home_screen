@@ -22,9 +22,10 @@ class _MeasurableState extends State<Measurable> {
   Color? _tempShadeColor;
   String s2 = 'Off';
   String s3 = 'Everyday';
+  String s4 = 'Everyday';
   ColorSwatch? _mainColor = Colors.blue;
-
   Color? _shadeColor = Colors.blue[800];
+  String _selectedItem = 'At least';
   Map<String, bool> mar = {
     'Monday': true,
     'Tuesday': true,
@@ -150,7 +151,7 @@ class _MeasurableState extends State<Measurable> {
                   padding: const EdgeInsets.all(8.0),
                   child: Deco().frequencyfil(
                     'Frequency',
-                    s2,
+                    s4,
                     context,
                   ),
                 ),
@@ -159,8 +160,34 @@ class _MeasurableState extends State<Measurable> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Deco().clockfil('Target Type', s2, context,
-                analogClockController, checkstate, status),
+            child: Stack(
+              children: [
+                Deco().emptyfil('Target Type'),
+                Positioned(
+                  top: 5,
+                  left: 18,
+                  bottom: 5,
+                  right: 18,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: _selectedItem,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedItem = newValue!;
+                        });
+                      },
+                      items: <String>['At least', 'At most']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
