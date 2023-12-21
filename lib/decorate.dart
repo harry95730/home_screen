@@ -11,7 +11,6 @@ class Deco {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.white,
         ),
         child: ListTile(
           title: Padding(

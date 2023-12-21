@@ -2,6 +2,8 @@ import 'package:analog_clock_picker/analog_clock_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:suraj/decorate.dart';
+import 'package:suraj/tagspage.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 class Measurable extends StatefulWidget {
   const Measurable({super.key});
@@ -18,6 +20,8 @@ class _MeasurableState extends State<Measurable> {
   TextEditingController controller4 = TextEditingController();
   AnalogClockController analogClockController = AnalogClockController();
   AnalogClockController analogClockController1 = AnalogClockController();
+  TextfieldTagsController tagcontroller = TextfieldTagsController();
+  List<String> tags = [];
   ColorSwatch? _tempMainColor;
   Color? _tempShadeColor;
   String s2 = 'Off';
@@ -134,6 +138,21 @@ class _MeasurableState extends State<Measurable> {
                               ? Deco().colorfil('Color', _shadeColor!)
                               : Deco().colorfil('Color', _mainColor!)),
                     ))
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                Deco().emptyfil('Select tags'),
+                Positioned(
+                  top: 5,
+                  left: 18,
+                  bottom: 5,
+                  right: 18,
+                  child: Tag().tagsfunction(tagcontroller, tags),
+                )
               ],
             ),
           ),

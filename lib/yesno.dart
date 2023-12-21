@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:suraj/decorate.dart';
 import 'package:analog_clock_picker/analog_clock_picker.dart';
+import 'package:suraj/tagspage.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 class YesorNo extends StatefulWidget {
   const YesorNo({super.key});
@@ -16,6 +18,8 @@ class _YesorNoState extends State<YesorNo> {
   TextEditingController controller2 = TextEditingController();
   AnalogClockController analogClockController = AnalogClockController();
   AnalogClockController analogClockController1 = AnalogClockController();
+  TextfieldTagsController tagcontroller = TextfieldTagsController();
+  List<String> tags = [];
   String s2 = 'Off';
   String s3 = 'Everyday';
   String s4 = 'Everyday';
@@ -137,6 +141,21 @@ class _YesorNoState extends State<YesorNo> {
           ),
           Deco()
               .textfil(controller1, 'e.g Did you exercise today?', 'Question'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                Deco().emptyfil('Select tags'),
+                Positioned(
+                  top: 5,
+                  left: 18,
+                  bottom: 5,
+                  right: 18,
+                  child: Tag().tagsfunction(tagcontroller,tags),
+                )
+              ],
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Deco().frequencyfil(
