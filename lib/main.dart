@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:suraj/home_page.dart';
-import 'counter.dart';
+import 'package:suraj/pages/home_page.dart';
+import 'pages/counter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

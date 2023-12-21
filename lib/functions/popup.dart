@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:rrule_generator/rrule_generator.dart';
-import 'package:suraj/classforfunctios.dart';
-import 'package:suraj/decorate.dart';
-import 'package:suraj/home_page.dart';
-import 'package:suraj/measurable.dart';
-import 'package:suraj/yesno.dart';
+import 'package:suraj/functions/classforfunctios.dart';
+import 'package:suraj/decorate/decorate.dart';
+import 'package:suraj/pages/home_page.dart';
+import 'package:suraj/pages/measurable.dart';
+import 'package:suraj/pages/yesno.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 

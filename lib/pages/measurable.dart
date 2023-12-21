@@ -1,8 +1,8 @@
 import 'package:analog_clock_picker/analog_clock_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:suraj/decorate.dart';
-import 'package:suraj/tagspage.dart';
+import 'package:suraj/decorate/decorate.dart';
+import 'package:suraj/pages/tagspage.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class Measurable extends StatefulWidget {

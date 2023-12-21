@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suraj/classforfunctios.dart';
+import 'package:suraj/functions/classforfunctios.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class Tag {

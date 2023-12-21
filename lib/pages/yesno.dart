@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:suraj/decorate.dart';
+import 'package:suraj/decorate/decorate.dart';
 import 'package:analog_clock_picker/analog_clock_picker.dart';
-import 'package:suraj/tagspage.dart';
+import 'package:suraj/pages/tagspage.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class YesorNo extends StatefulWidget {
@@ -151,7 +151,7 @@ class _YesorNoState extends State<YesorNo> {
                   left: 18,
                   bottom: 5,
                   right: 18,
-                  child: Tag().tagsfunction(tagcontroller,tags),
+                  child: Tag().tagsfunction(tagcontroller, tags),
                 )
               ],
             ),

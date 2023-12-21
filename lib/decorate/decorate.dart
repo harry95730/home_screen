@@ -4,7 +4,7 @@ import 'package:analog_clock_picker/analog_clock_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:suraj/popup.dart';
+import 'package:suraj/functions/popup.dart';
 
 class Deco {
   Widget tile(String s1, String s2) {

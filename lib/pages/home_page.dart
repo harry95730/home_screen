@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:suraj/classforfunctios.dart';
-import 'package:suraj/counter.dart';
-import 'package:suraj/popup.dart';
+import 'package:suraj/functions/classforfunctios.dart';
+import 'package:suraj/pages/counter.dart';
+import 'package:suraj/functions/popup.dart';
 
 List<String> mylist = [];
 List<String> mylist1 = [];
