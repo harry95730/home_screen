@@ -10,6 +10,9 @@ import 'package:suraj/pages/yesno.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
+List<String> tags = [];
+double distanceToField = 1.0;
+
 class Fur {
   Future<String> addTodo(BuildContext context, String dest) async {
     TextEditingController textController = TextEditingController();
@@ -54,6 +57,178 @@ class Fur {
                   },
                 ),
                 const SizedBox(height: 10),
+                Autocomplete<String>(
+                  optionsViewBuilder: (context, onSelected, options) {
+                    return Material(
+                      color: Colors.transparent,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: options.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final dynamic option = options.elementAt(index);
+                          return Container(
+                            decoration: const BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: Offset(0, 3),
+                                  blurRadius: 6,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                              color: Colors.white,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                onSelected(option);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15.0, horizontal: 10),
+                                child: Text(
+                                  '#$option',
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(255, 74, 137, 92),
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.none,
+                                      fontSize: 15),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text == '') {
+                      return const Iterable<String>.empty();
+                    }
+                    final inputText = textEditingValue.text.toLowerCase();
+                    return pickLanguage.where((String option) {
+                      final optionLower = option.toLowerCase();
+                      return optionLower.contains(inputText);
+                    });
+                  },
+                  onSelected: (String selectedTag) {
+                    controller.addTag = selectedTag;
+                  },
+                  fieldViewBuilder: (context, ttec, tfn, onFieldSubmitted) {
+                    return TextFieldTags(
+                      textEditingController: ttec,
+                      focusNode: tfn,
+                      textfieldTagsController: controller,
+                      initialTags: tags,
+                      textSeparators: const [' ', ','],
+                      letterCase: LetterCase.normal,
+                      validator: (String tag) {
+                        if (controller.getTags!.contains(tag.toLowerCase())) {
+                          return 'exists';
+                        }
+                        return null;
+                      },
+                      inputfieldBuilder:
+                          (context, tec, fn, error, onChanged, onSubmitted) {
+                        return ((context, sc, tags, onTagDelete) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                flex: tags.isNotEmpty ? 3 : 0,
+                                child: SingleChildScrollView(
+                                  controller: sc,
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: tags.map((String tag) {
+                                        return Container(
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0),
+                                            ),
+                                            color: Color.fromARGB(
+                                                255, 74, 137, 92),
+                                          ),
+                                          margin: const EdgeInsets.only(
+                                              right: 10.0),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0, vertical: 4.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                '#$tag',
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              const SizedBox(width: 4.0),
+                                              InkWell(
+                                                child: const Icon(
+                                                  Icons.cancel,
+                                                  size: 14.0,
+                                                  color: Color.fromARGB(
+                                                      255, 233, 233, 233),
+                                                ),
+                                                onTap: () {
+                                                  onTagDelete(tag);
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      }).toList()),
+                                ),
+                              ),
+                              Expanded(
+                                child: TextField(
+                                  controller: tec,
+                                  focusNode: fn,
+                                  decoration: InputDecoration(
+                                    border: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color:
+                                              Color.fromARGB(255, 74, 137, 92),
+                                          width: 3.0),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color:
+                                              Color.fromARGB(255, 74, 137, 92),
+                                          width: 3.0),
+                                    ),
+                                    helperText: controller.hasTags
+                                        ? ''
+                                        : 'Select tags...',
+                                    helperStyle: const TextStyle(
+                                      color: Color.fromARGB(255, 74, 137, 92),
+                                    ),
+                                    hintText: controller.hasTags
+                                        ? ''
+                                        : "Enter tag...",
+                                    errorText: error,
+                                    prefixIconConstraints: BoxConstraints(
+                                        maxWidth: distanceToField * 0.74),
+                                  ),
+                                  onChanged: onChanged,
+                                  onSubmitted: onSubmitted,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  controller.clearTags();
+                                },
+                                child:
+                                    const Icon(Icons.clear, color: Colors.grey),
+                              ),
+                            ],
+                          );
+                        });
+                      },
+                    );
+                  },
+                ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -112,7 +287,6 @@ class Fur {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor: Colors.transparent,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -143,6 +317,21 @@ class Fur {
                 child: Deco().tile('Measurable',
                     'e.g. How many miles did you run today? How many pages did you read?'),
               ),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  height: 20,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context, 'c');
+                },
+                child: Deco().tile('Tags page', 'e.g. stepcounter?'),
+              ),
             ],
           ),
         );
@@ -155,6 +344,8 @@ class Fur {
       } else if (res == 'a') {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const Measurable()));
+      } else if (res == 'c') {
+        await Fur().addTodo(context, '');
       }
     }
   }
