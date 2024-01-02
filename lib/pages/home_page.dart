@@ -150,8 +150,10 @@ class _StartState extends State<Start> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           //await Fur().addTodo(context, '');
-          //f(pickLanguage[selectednumber], selectednumber);
+
           await Fur().showYesNoDialog(context);
+          f(pickLanguage[selectednumber], selectednumber);
+          setState(() {});
 
           setState(() {});
         },

@@ -107,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   TextEditingController textController = TextEditingController();
   int? counterValue;
   int? stepvalue;
+  int stepsize = -1;
   @override
   void initState() {
     super.initState();
@@ -226,7 +227,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                               return Text('Error: ${snapshot.error}');
                             } else {
                               textController.text =
-                                  snapshot.data?.toString() ?? '';
+                                  snapshot.data?.toString() ?? '1';
+
                               return TextField(
                                 controller: textController,
                                 decoration: InputDecoration(
@@ -241,11 +243,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                                   suffixIcon: IconButton(
                                     onPressed: () async {
                                       if (textController.text.isNotEmpty) {
+                                        stepsize =
+                                            int.parse(textController.text);
                                         _sendAndUpdatestepsize(widget.title,
                                             int.parse(textController.text));
+                                        setState(() {
+                                          textController.text =
+                                              stepsize.toString();
+                                        });
                                       } else {
                                         _sendAndUpdatestepsize(widget.title, 1);
                                         textController.text = '1';
+                                        stepsize = -1;
                                       }
                                       FocusScope.of(context).unfocus();
                                     },

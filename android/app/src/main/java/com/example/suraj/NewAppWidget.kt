@@ -12,6 +12,7 @@ import android.util.Log
 import android.content.Intent
 import android.widget.Toast
 import android.app.PendingIntent
+import android.os.Build
 
 const val ACTION_TOAST = "actionToast"
 const val EXTRA_ITEM_POSITION = "extraItemPosition"
@@ -32,8 +33,6 @@ class NewAppWidget : AppWidgetProvider() {
                 val clickedPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, 0)
                 val clickedaction = intent.getIntExtra("value", 5)
                 val widgetText = intent.getStringExtra("widgettext")
-                
-               
 
                 if (clickedaction == 0) {
                     val decrementUri = Uri.parse("homeWidgetCounter://decrement_$widgetText")
@@ -70,6 +69,13 @@ class NewAppWidget : AppWidgetProvider() {
                     val display="step incresed"
                     Toast.makeText(context, "$widgetText \n$display", Toast.LENGTH_SHORT).show()
                 }
+                if (clickedaction == 5) {
+                    val stepincrementUri = Uri.parse("homeWidgetCounter://stepincrement_$widgetText")
+                    val stepincrementIntent = HomeWidgetBackgroundIntent.getBroadcast(context, stepincrementUri)
+                    stepincrementIntent.send()
+                    val display="step incresed"
+                    Toast.makeText(context, "$widgetText \n$display", Toast.LENGTH_SHORT).show()
+                }
                 
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -95,12 +101,17 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
         val clickIntent = Intent(context, NewAppWidget::class.java).apply {
             action = ACTION_TOAST
         }
-        val clickPendingIntent = PendingIntent.getBroadcast(
-            context,
-            0,
-            clickIntent,
-            0
-        )
+        val flags = if (Build.VERSION.SDK_INT >= 23) {
+            PendingIntent.FLAG_MUTABLE
+            } else {
+                0
+            }
+            val clickPendingIntent = PendingIntent.getBroadcast(
+                context,
+                0,
+                clickIntent,
+                flags
+            )
 
     val intent = Intent(context, ExampleWidgetService::class.java)
     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)

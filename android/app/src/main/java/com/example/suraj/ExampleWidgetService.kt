@@ -12,7 +12,7 @@ import android.widget.Toast
 import com.google.gson.reflect.TypeToken
 import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetProvider
-
+import android.view.View
 import android.net.Uri
 
 class ExampleWidgetService : RemoteViewsService() {
@@ -72,12 +72,19 @@ class ExampleWidgetItemFactory(private val context: Context, intent: Intent) :
         var value=widgetData.getInt(listofmap[position], 0)
         var stepvalue=widgetData.getInt("${listofmap[position]}stepsize",1)
 
-        val views = RemoteViews(context.packageName, R.layout.example_widget_item)
+        val views = RemoteViews(context.packageName, R.layout.example_widget_item1)
+        if (position%2 == 0) {
+            views.setViewVisibility(R.id.my_linear_layout, View.VISIBLE)    
+            views.setViewVisibility(R.id.my_linear_layout1, View.GONE)
+        }else {
+            views.setViewVisibility(R.id.my_linear_layout, View.GONE)
+            views.setViewVisibility(R.id.my_linear_layout1, View.VISIBLE)    
+        }
         views.setTextViewText(R.id.appwidget_text, listofmap[position])
+        views.setTextViewText(R.id.appwidget_text1, listofmap[position])
         views.setTextViewText(R.id.text_counter, value.toString())
         views.setTextViewText(R.id.text_stepcounter, stepvalue.toString())
         views.setTextViewText(R.id.tv_counter, "Stepsize")
-       
         
         val defillIntent = Intent().apply {
             putExtra(EXTRA_ITEM_POSITION, position)
@@ -85,7 +92,7 @@ class ExampleWidgetItemFactory(private val context: Context, intent: Intent) :
             putExtra("value", 0)
             putExtra("widgettext", widgetText)
         }
-        
+            
         val refillIntent = Intent().apply {
             putExtra(EXTRA_ITEM_POSITION, position)
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -100,8 +107,6 @@ class ExampleWidgetItemFactory(private val context: Context, intent: Intent) :
             putExtra("widgettext", widgetText)
         }
 
-        
-
         val sdfillIntent = Intent().apply {
             putExtra(EXTRA_ITEM_POSITION, position)
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -115,16 +120,23 @@ class ExampleWidgetItemFactory(private val context: Context, intent: Intent) :
             putExtra("widgettext", widgetText)
             putExtra("value", 4)
         }
-
-        
+            
+        val checkfillIntent = Intent().apply {
+            putExtra(EXTRA_ITEM_POSITION, position)
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            putExtra("widgettext", widgetText)
+            putExtra("value", 5)
+        }
+         
+            
+        views.setOnClickFillInIntent(R.id.check_box_1, checkfillIntent)
         views.setOnClickFillInIntent(R.id.button_decrement, defillIntent)
         views.setOnClickFillInIntent(R.id.button_increment, infillIntent)
         views.setOnClickFillInIntent(R.id.button_clear, refillIntent)
         views.setOnClickFillInIntent(R.id.button_stepdecrement, sdfillIntent)
         views.setOnClickFillInIntent(R.id.button_stepincrement, sifillIntent)
-
         
-        return views
+        return views       
     }
 
     override fun getLoadingView(): RemoteViews? {

@@ -15,6 +15,11 @@ import android.widget.RemoteViews
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import es.antonborri.home_widget.HomeWidgetBackgroundIntent
+import android.net.Uri
+import android.app.PendingIntent
+import android.os.Build
+
 
 
 
@@ -24,9 +29,7 @@ class NewAppWidgetConfigureActivity : Activity() {
     private lateinit var spinner: Spinner
     private var onClickListener = View.OnClickListener {
         val context = this@NewAppWidgetConfigureActivity
-
         // When the button is clicked, store the string locally
-
         spinner = findViewById(R.id.spinner_options)
         // Get the selected item from the spinner
         val selectedOption = spinner.selectedItem.toString()
@@ -34,7 +37,46 @@ class NewAppWidgetConfigureActivity : Activity() {
         // Log.d("NewAppWidgetConfigureActivity", selectedOption)
 
         // It is the responsibility of the configuration activity to update the app widget
+
+        
+
+        val views = RemoteViews(context.packageName, R.layout.new_app_widget)
+
+        val serviceIntent = Intent(context, ExampleWidgetService::class.java).apply {
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+            }
+
+            val clickIntent = Intent(context, NewAppWidget::class.java).apply {
+                action = ACTION_TOAST
+            }
+            val flags = if (Build.VERSION.SDK_INT >= 23) {
+            PendingIntent.FLAG_MUTABLE
+            } else {
+                0
+            }
+            val clickPendingIntent = PendingIntent.getBroadcast(
+                context,
+                0,
+                clickIntent,
+                flags
+            )
+        val widgetText = selectedOption
+        val intent = Intent(context, ExampleWidgetService::class.java)
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
+        val incrementUri = Uri.parse("homeWidgetCounter://increment_$widgetText")
+        val incrementIntent = HomeWidgetBackgroundIntent.getBroadcast(context, incrementUri)
+        views.setOnClickPendingIntent(R.id.button_increment, incrementIntent)
+        
+        views.setRemoteAdapter(R.id.example_widget_stack_view, intent)
+        views.setEmptyView(R.id.example_widget_stack_view, R.id.example_widget_empty_view)
+        views.setPendingIntentTemplate(R.id.example_widget_stack_view, clickPendingIntent)
+
+       
+        
         val appWidgetManager = AppWidgetManager.getInstance(context)
+        appWidgetManager.updateAppWidget(appWidgetId, views)
         updateAppWidget(context, appWidgetManager, appWidgetId)
 
         // Make sure we pass back the original appWidgetId
