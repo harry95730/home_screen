@@ -28,6 +28,17 @@ class Deco {
         ));
   }
 
+  Widget titlebara(BuildContext context, bool isSwitched, Function change) {
+    return Switch(
+      value: isSwitched,
+      onChanged: (value) {
+        change(value);
+      },
+      activeTrackColor: Colors.lightGreenAccent,
+      activeColor: Colors.green,
+    );
+  }
+
   Widget titlebar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -37,7 +48,7 @@ class Deco {
         },
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.all(12.0),
-          side: const BorderSide(width: 2.0, color: Colors.white),
+          side: const BorderSide(width: 2.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
@@ -46,7 +57,7 @@ class Deco {
           padding: EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             'SAVE',
-            style: TextStyle(fontSize: 14.0, color: Colors.white),
+            style: TextStyle(fontSize: 14.0),
           ),
         ),
       ),

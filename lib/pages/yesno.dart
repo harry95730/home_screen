@@ -13,12 +13,13 @@ class YesorNo extends StatefulWidget {
 }
 
 class _YesorNoState extends State<YesorNo> {
-  TextEditingController controller = TextEditingController();
-  TextEditingController controller1 = TextEditingController();
-  TextEditingController controller2 = TextEditingController();
+  TextEditingController namecontroller = TextEditingController();
+  TextEditingController questioncontroller = TextEditingController();
+  TextEditingController notescontroller = TextEditingController();
   AnalogClockController analogClockController = AnalogClockController();
-  AnalogClockController analogClockController1 = AnalogClockController();
+  AnalogClockController confirmationController = AnalogClockController();
   TextfieldTagsController tagcontroller = TextfieldTagsController();
+  bool homeWidgetSwitch = false;
   List<String> tags = [];
   String s2 = 'Off';
   String s3 = 'Everyday';
@@ -62,7 +63,7 @@ class _YesorNoState extends State<YesorNo> {
     if (x == 'true') {
       setState(() {
         s2 = DateFormat("hh:mm a").format(analogClockController.value);
-        analogClockController1.value = analogClockController.value;
+        confirmationController.value = analogClockController.value;
       });
     } else {
       setState(() {
@@ -74,8 +75,8 @@ class _YesorNoState extends State<YesorNo> {
   void status() {
     if (s2 != 'Off') {
       setState(() {
-        if (analogClockController.value != analogClockController1.value) {
-          analogClockController.value = analogClockController1.value;
+        if (analogClockController.value != confirmationController.value) {
+          analogClockController.value = confirmationController.value;
         }
       });
     }
@@ -103,81 +104,92 @@ class _YesorNoState extends State<YesorNo> {
     _tempMainColor = color;
   }
 
+  void changestatus(bool s) {
+    setState(() {
+      homeWidgetSwitch = s;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create habit'),
         actions: [
+          Deco().titlebara(context, homeWidgetSwitch, changestatus),
           Deco().titlebar(context),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                    flex: 9,
-                    child: Deco().textfil(controller, 'e.g Exercise', 'Name')),
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(right: 8.0, top: 8, bottom: 8),
-                    child: InkWell(
-                        onTap: () {
-                          Deco().openColorPicker(context, temp, maincolor,
-                              _mainColor, maincolass, shadecolass);
-                        },
-                        child: _shadeColor != null
-                            ? Deco().colorfil('Color', _shadeColor!)
-                            : Deco().colorfil('Color', _mainColor!)),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                      flex: 9,
+                      child: Deco()
+                          .textfil(namecontroller, 'e.g Exercise', 'Name')),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(right: 8.0, top: 8, bottom: 8),
+                      child: InkWell(
+                          onTap: () {
+                            Deco().openColorPicker(context, temp, maincolor,
+                                _mainColor, maincolass, shadecolass);
+                          },
+                          child: _shadeColor != null
+                              ? Deco().colorfil('Color', _shadeColor!)
+                              : Deco().colorfil('Color', _mainColor!)),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Deco()
-              .textfil(controller1, 'e.g Did you exercise today?', 'Question'),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: [
-                Deco().emptyfil('Select tags'),
-                Positioned(
-                  top: 5,
-                  left: 18,
-                  bottom: 5,
-                  right: 18,
-                  child: Tag().tagsfunction(tagcontroller, tags),
-                )
-              ],
+            Deco().textfil(
+                questioncontroller, 'e.g Did you exercise today?', 'Question'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: [
+                  Deco().emptyfil('Select tags'),
+                  Positioned(
+                    top: 5,
+                    left: 18,
+                    bottom: 5,
+                    right: 18,
+                    child: Tag().tagsfunction(tagcontroller, tags),
+                  )
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Deco().frequencyfil(
-              'Frequency',
-              s4,
-              context,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Deco().frequencyfil(
+                'Frequency',
+                s4,
+                context,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-            child: Deco().clockfil('Remainder', s2, context,
-                analogClockController, checkstate, status),
-          ),
-          s2 != 'Off'
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Deco().extendclockfield(
-                      'Select Days', s3, context, mar, weekcall),
-                )
-              : Container(),
-          Deco().textfil(controller2, '(Optional)', 'Notes'),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+              child: Deco().clockfil('Remainder', s2, context,
+                  analogClockController, checkstate, status),
+            ),
+            s2 != 'Off'
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Deco().extendclockfield(
+                        'Select Days', s3, context, mar, weekcall),
+                  )
+                : Container(),
+            Deco().textfil(notescontroller, '(Optional)', 'Notes'),
+          ],
+        ),
       ),
     );
   }

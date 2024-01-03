@@ -149,13 +149,9 @@ class _StartState extends State<Start> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          //await Fur().addTodo(context, '');
-
           await Fur().showYesNoDialog(context);
           f(pickLanguage[selectednumber], selectednumber);
-          setState(() {});
-
-          setState(() {});
+          setState;
         },
         tooltip: 'Add Counter',
         child: const Icon(Icons.add),
