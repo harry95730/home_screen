@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:suraj/functions/classforfunctios.dart';
-import 'package:suraj/pages/counter.dart';
-import 'package:suraj/functions/popup.dart';
+import 'package:suraj/functions/home_widget_data_functions.dart';
+import 'package:suraj/functions/list_items_in_dialog.dart';
+import 'package:suraj/pages/data_table_homepage.dart';
 
 List<String> mylist = [];
-List<String> mylist1 = [];
 
 class Start extends StatefulWidget {
   const Start({super.key});
@@ -15,6 +14,7 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
+  List<String> mylist1 = [];
   int selectednumber = 0;
   @override
   void initState() {
@@ -25,7 +25,22 @@ class _StartState extends State<Start> {
 
   f1() async {
     await Functions().gettags();
-    setState(() {});
+    setState;
+  }
+
+  void managingControllers() {
+    for (ScrollController x in _controllers) {
+      x.addListener(() {
+        final double currentOffset = x.position.pixels;
+        for (ScrollController y in _controllers) {
+          if (y != x) {
+            if ((currentOffset - y.position.pixels).abs() >= 0.01) {
+              y.jumpTo(currentOffset);
+            }
+          }
+        }
+      });
+    }
   }
 
   void _loadstate() async {
@@ -37,10 +52,17 @@ class _StartState extends State<Start> {
           mylist = list;
           for (var i in mylist) {
             mylist1.add(i);
+            _controllers.add(ScrollController());
           }
+          _controllers.add(ScrollController());
+          managingControllers();
         });
       }
     }
+  }
+
+  void statemanageofchild() {
+    setState;
   }
 
   void deleteitem(String number) async {
@@ -65,24 +87,30 @@ class _StartState extends State<Start> {
     }
     setState(() {});
     String formattedString = mylist.join('|');
-
     await HomeWidget.saveWidgetData('myStringList', formattedString);
-    Functions().savetags();
+    Functions().savetags(retrievedMap, 'mapKey');
   }
 
-  void f(String x, int num) {
+  void listoftags(String x, int num) {
     mylist1.clear();
+    _controllers.clear();
     if (num == 0) {
       for (var i in mylist) {
         mylist1.add(i);
+        _controllers.add(ScrollController());
       }
     } else {
       for (var i in retrievedMap[x]) {
+        _controllers.add(ScrollController());
         mylist1.add(i);
       }
     }
+    _controllers.add(ScrollController());
+    managingControllers();
+    setState;
   }
 
+  final List<ScrollController> _controllers = <ScrollController>[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +131,7 @@ class _StartState extends State<Start> {
                   onTap: () {
                     setState(() {
                       selectednumber = index;
-                      f(pickLanguage[index], index);
+                      listoftags(pickLanguage[index], index);
                     });
                   },
                   child: Container(
@@ -134,12 +162,43 @@ class _StartState extends State<Start> {
               flex: 10,
               child: mylist1.isNotEmpty
                   ? ListView.builder(
-                      physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: mylist1.length,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: mylist1.length + 1,
                       itemBuilder: (context, index) {
-                        return MyHomePage(
-                            title: mylist1[index], updateText: deleteitem);
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width:
+                                      (MediaQuery.of(context).size.width / 3) -
+                                          1,
+                                  height: 55,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: index == 0
+                                          ? const Text('')
+                                          : Text(mylist1[index - 1]),
+                                    ),
+                                  ),
+                                ),
+                                SingleItem(
+                                  controller: _controllers[index],
+                                  name: index == 0 ? '' : mylist1[index - 1],
+                                )
+                              ],
+                            ),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 1,
+                              height: 1,
+                            )
+                          ],
+                        );
                       },
                     )
                   : const Center(
@@ -150,8 +209,7 @@ class _StartState extends State<Start> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Fur().showYesNoDialog(context);
-          f(pickLanguage[selectednumber], selectednumber);
-          setState;
+          listoftags(pickLanguage[selectednumber], selectednumber);
         },
         tooltip: 'Add Counter',
         child: const Icon(Icons.add),

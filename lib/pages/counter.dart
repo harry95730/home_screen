@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:suraj/functions/home_widget_data_functions.dart';
 
 typedef UpdateTextCallback = void Function(String number);
 
@@ -25,9 +28,16 @@ Future<void> interactiveCallback(Uri? uri) async {
   }
 }
 
-/// Gets the currently stored Value
 Future<int> _value(String countKey) async {
-  final value = await HomeWidget.getWidgetData<int>(countKey, defaultValue: 0);
+  var mapdata = await HomeWidget.getWidgetData(countKey);
+  if (mapdata != null) {
+    Map<String, dynamic> individualhabitmapdata = json.decode(mapdata);
+    DateTime today = DateTime.now();
+    String key = Functions().getFormattedDate(today);
+    return individualhabitmapdata[key];
+  }
+  final value =
+      await HomeWidget.getWidgetData<int>('${countKey}nil', defaultValue: 0);
   return value!;
 }
 
@@ -69,12 +79,20 @@ Future<int> _stepdecremenBac(String countKey) async {
 
 /// Clears the saved Counter Value
 Future<void> _clear(String countKey) async {
-  await _sendAndUpdate(countKey, null);
+  await _sendAndUpdate(countKey, 0);
 }
 
 /// Stores [value] in the Widget Configuration
-Future<void> _sendAndUpdate(String countKey, [int? value]) async {
-  await HomeWidget.saveWidgetData(countKey, value);
+Future<void> _sendAndUpdate(String countKey, int value) async {
+  var mapdata = await HomeWidget.getWidgetData(countKey);
+  if (mapdata != null) {
+    Map<String, dynamic> individualhabitmapdata = json.decode(mapdata);
+    DateTime today = DateTime.now();
+    String key = Functions().getFormattedDate(today);
+
+    individualhabitmapdata[key] = value;
+    Functions().savetags(individualhabitmapdata, countKey);
+  }
 
   await HomeWidget.updateWidget(
     androidName: 'NewAppWidget',
@@ -193,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: IconButton(
                       onPressed: () async {
-                        await _sendAndUpdate(widget.title, null);
+                        await _sendAndUpdate(widget.title, 0);
                         await _sendAndUpdatestepsize(widget.title, null);
                         widget.updateText(widget.title);
                       },

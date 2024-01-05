@@ -1,8 +1,10 @@
 import 'package:analog_clock_picker/analog_clock_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:suraj/decorate/decorate.dart';
-import 'package:suraj/pages/tagspage.dart';
+import 'package:suraj/commonClassDecoration/measurable_yesno.dart';
+import 'package:suraj/functions/home_widget_data_functions.dart';
+import 'package:suraj/functions/tagspage.dart';
+import 'package:suraj/pages/home_page.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class Measurable extends StatefulWidget {
@@ -17,16 +19,16 @@ class _MeasurableState extends State<Measurable> {
   TextEditingController questioncontroller = TextEditingController();
   TextEditingController unitscontroller = TextEditingController();
   TextEditingController notescontroller = TextEditingController();
-  TextEditingController controller4 = TextEditingController();
+  TextEditingController targetcontroller = TextEditingController();
   AnalogClockController analogClockController = AnalogClockController();
-  AnalogClockController confirmationController = AnalogClockController();
+  AnalogClockController confirmationClockController = AnalogClockController();
   TextfieldTagsController tagcontroller = TextfieldTagsController();
   bool homeWidgetSwitch = false;
   List<String> tags = [];
   ColorSwatch? _tempMainColor;
   Color? _tempShadeColor;
-  String s2 = 'Off';
-  String s3 = 'Everyday';
+  String remaindertimeoroff = 'Off';
+  String remainderdays = 'Everyday';
   String s4 = 'Everyday';
   ColorSwatch? _mainColor = Colors.blue;
   Color? _shadeColor = Colors.blue[800];
@@ -58,7 +60,7 @@ class _MeasurableState extends State<Measurable> {
   void weekcall(String x) {
     if (x == 'true') {
       setState(() {
-        s3 = Deco().star(mar);
+        remainderdays = Deco().star(mar);
         mar1 = mar;
       });
     } else {
@@ -71,21 +73,22 @@ class _MeasurableState extends State<Measurable> {
   void checkstate(String x) {
     if (x == 'true') {
       setState(() {
-        s2 = DateFormat("hh:mm a").format(analogClockController.value);
-        confirmationController.value = analogClockController.value;
+        remaindertimeoroff =
+            DateFormat("hh:mm a").format(analogClockController.value);
+        confirmationClockController.value = analogClockController.value;
       });
     } else {
       setState(() {
-        s2 = 'Off';
+        remaindertimeoroff = 'Off';
       });
     }
   }
 
   void status() {
-    if (s2 != 'Off') {
+    if (remaindertimeoroff != 'Off') {
       setState(() {
-        if (analogClockController.value != confirmationController.value) {
-          analogClockController.value = confirmationController.value;
+        if (analogClockController.value != confirmationClockController.value) {
+          analogClockController.value = confirmationClockController.value;
         }
       });
     }
@@ -113,14 +116,72 @@ class _MeasurableState extends State<Measurable> {
     });
   }
 
+  bool savingtheitem() {
+    Map harry = {
+      "type": "measurable",
+      "switch": homeWidgetSwitch,
+      "name": namecontroller.text,
+      "question": questioncontroller.text,
+      "unit": unitscontroller.text,
+      "target": targetcontroller.text,
+      "targettype": _selectedItem,
+      "remainder": remaindertimeoroff,
+      "selectDays": remainderdays,
+      "notes": notescontroller.text,
+      "shadecolor": _shadeColor.toString(),
+      "maincolor": _mainColor.toString(),
+      "frequency": "frequency"
+    };
+
+    if (namecontroller.text.isNotEmpty) {
+      namecontroller.text = namecontroller.text.trim();
+      for (var element in mylist) {
+        if (element == namecontroller.text) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('name already exists'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          return false;
+        }
+      }
+      Functions().savetags(harry, '${namecontroller.text}data');
+      Functions().initializationofhabit(namecontroller.text, "measurable");
+      mylist.add(namecontroller.text);
+      Functions().savedata(mylist, 'myStringList');
+      List<String>? mylis = tagcontroller.getTags;
+      if (mylis != null) {
+        for (var i in mylis) {
+          if (pickLanguage.contains(i) && i != 'all') {
+            retrievedMap[i].add(namecontroller.text);
+          } else if (i != 'all') {
+            pickLanguage.add(i);
+            retrievedMap[i] = [namecontroller.text];
+          }
+        }
+      }
+      Functions().savetags(retrievedMap, 'mapKey');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text('Item saved successfully'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create habit'),
         actions: [
-          Deco().titlebara(context, homeWidgetSwitch, changestatus),
-          Deco().titlebar(context),
+          Deco().switchBar(context, homeWidgetSwitch, changestatus),
+          Deco().saveBar(context, savingtheitem),
         ],
       ),
       body: SingleChildScrollView(
@@ -174,7 +235,8 @@ class _MeasurableState extends State<Measurable> {
               children: [
                 Expanded(
                     flex: 5,
-                    child: Deco().textfil(controller4, 'e.g. 15', 'Target')),
+                    child:
+                        Deco().textfil(targetcontroller, 'e.g. 15', 'Target')),
                 Expanded(
                   flex: 5,
                   child: Padding(
@@ -221,14 +283,14 @@ class _MeasurableState extends State<Measurable> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Deco().clockfil('Remainder', s2, context,
+              child: Deco().clockfil('Remainder', remaindertimeoroff, context,
                   analogClockController, checkstate, status),
             ),
-            s2 != 'Off'
+            remaindertimeoroff != 'Off'
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Deco().extendclockfield(
-                        'Select Days', s3, context, mar, weekcall),
+                        'Select Days', remainderdays, context, mar, weekcall),
                   )
                 : Container(),
             Deco().textfil(notescontroller, '(Optional)', 'Notes'),

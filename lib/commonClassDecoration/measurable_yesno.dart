@@ -4,7 +4,7 @@ import 'package:analog_clock_picker/analog_clock_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:suraj/functions/popup.dart';
+import 'package:suraj/functions/list_items_in_dialog.dart';
 
 class Deco {
   Widget tile(String s1, String s2) {
@@ -28,7 +28,7 @@ class Deco {
         ));
   }
 
-  Widget titlebara(BuildContext context, bool isSwitched, Function change) {
+  Widget switchBar(BuildContext context, bool isSwitched, Function change) {
     return Switch(
       value: isSwitched,
       onChanged: (value) {
@@ -39,12 +39,14 @@ class Deco {
     );
   }
 
-  Widget titlebar(BuildContext context) {
+  Widget saveBar(BuildContext context, Function save) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: OutlinedButton(
         onPressed: () {
-          Navigator.pop(context);
+          if (save()) {
+            Navigator.pop(context);
+          }
         },
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.all(12.0),
@@ -79,7 +81,7 @@ class Deco {
     );
   }
 
-  void openDialog(String title, Widget content, BuildContext context,
+  void openDialogforColor(String title, Widget content, BuildContext context,
       Function mn, Function ms) async {
     await showDialog(
       context: context,
@@ -109,7 +111,7 @@ class Deco {
 
   void openColorPicker(BuildContext context, Function temp, Function maincolor,
       ColorSwatch? maColor, Function mn, Function ms) async {
-    openDialog(
+    openDialogforColor(
         "Full Material Color picker",
         MaterialColorPicker(
           colors: fullMaterialColors,
