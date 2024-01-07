@@ -28,7 +28,7 @@ Future<void> interactiveCallback(Uri? uri) async {
   }
 }
 
-Future<int> _value(String countKey) async {
+Future<int> value(String countKey) async {
   var mapdata = await HomeWidget.getWidgetData(countKey);
   if (mapdata != null) {
     Map<String, dynamic> individualhabitmapdata = json.decode(mapdata);
@@ -48,7 +48,7 @@ Future<int> _stepvalue(String countKey) async {
 }
 
 Future<int> _incremenBac(String countKey) async {
-  final oldValue = await _value(countKey);
+  final oldValue = await value(countKey);
   final stepValue = await _stepvalue(countKey);
   final newValue = oldValue + stepValue;
   await _sendAndUpdate(countKey, newValue);
@@ -63,7 +63,7 @@ Future<int> _stepincremenBac(String countKey) async {
 }
 
 Future<int> _decremenBac(String countKey) async {
-  final oldValue = await _value(countKey);
+  final oldValue = await value(countKey);
   final stepValue = await _stepvalue(countKey);
   final newValue = oldValue - stepValue;
   await _sendAndUpdate(countKey, newValue);
@@ -192,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       FutureBuilder<int>(
-                        future: _value(widget.title),
+                        future: value(widget.title),
                         builder: (_, snapshot) => Column(
                           children: [
                             Text(

@@ -116,7 +116,7 @@ class _YesorNoState extends State<YesorNo> {
 
   bool savingtheitem() {
     Map harry = {
-      "type": "measurable",
+      "type": "yesOrno",
       "switch": homeWidgetSwitch,
       "name": namecontroller.text,
       "question": questioncontroller.text,

@@ -61,10 +61,6 @@ class _StartState extends State<Start> {
     }
   }
 
-  void statemanageofchild() {
-    setState;
-  }
-
   void deleteitem(String number) async {
     for (var i in pickLanguage) {
       if (i != 'all') {
@@ -91,7 +87,7 @@ class _StartState extends State<Start> {
     Functions().savetags(retrievedMap, 'mapKey');
   }
 
-  void listoftags(String x, int num) {
+  void lifofelementsintags(String x, int num) {
     mylist1.clear();
     _controllers.clear();
     if (num == 0) {
@@ -107,8 +103,11 @@ class _StartState extends State<Start> {
     }
     _controllers.add(ScrollController());
     managingControllers();
+    changed = true;
     setState;
   }
+
+  bool changed = true;
 
   final List<ScrollController> _controllers = <ScrollController>[];
   @override
@@ -131,7 +130,7 @@ class _StartState extends State<Start> {
                   onTap: () {
                     setState(() {
                       selectednumber = index;
-                      listoftags(pickLanguage[index], index);
+                      lifofelementsintags(pickLanguage[index], index);
                     });
                   },
                   child: Container(
@@ -189,6 +188,7 @@ class _StartState extends State<Start> {
                                 SingleItem(
                                   controller: _controllers[index],
                                   name: index == 0 ? '' : mylist1[index - 1],
+                                  changed: changed,
                                 )
                               ],
                             ),
@@ -209,7 +209,9 @@ class _StartState extends State<Start> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Fur().showYesNoDialog(context);
-          listoftags(pickLanguage[selectednumber], selectednumber);
+          setState(() {
+            lifofelementsintags(pickLanguage[selectednumber], selectednumber);
+          });
         },
         tooltip: 'Add Counter',
         child: const Icon(Icons.add),

@@ -30,14 +30,9 @@ class Fur {
                   },
                   child: Deco().tile('Yes or No',
                       'e.g. Did you wake up early today? Did you exercise? Did you play Chess')),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  height: 20,
-                ),
+              Container(
+                color: Colors.transparent,
+                height: 20,
               ),
               InkWell(
                 onTap: () {
@@ -46,15 +41,6 @@ class Fur {
                 child: Deco().tile('Measurable',
                     'e.g. How many miles did you run today? How many pages did you read?'),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  height: 20,
-                ),
-              )
             ],
           ),
         );

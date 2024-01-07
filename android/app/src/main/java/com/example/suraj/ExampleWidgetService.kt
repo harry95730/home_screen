@@ -69,17 +69,40 @@ class ExampleWidgetItemFactory(private val context: Context, intent: Intent) :
     override fun getViewAt(position: Int): RemoteViews {
         val widgetText =listofmap[position]
         val widgetData= context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-        var value=widgetData.getInt(listofmap[position], 0)
+        var value=widgetData.getInt("${listofmap[position]}temp", 0)
         var stepvalue=widgetData.getInt("${listofmap[position]}stepsize",1)
 
         val views = RemoteViews(context.packageName, R.layout.example_widget_item1)
-        if (position%2 == 0) {
-            views.setViewVisibility(R.id.my_linear_layout, View.VISIBLE)    
-            views.setViewVisibility(R.id.my_linear_layout1, View.GONE)
-        }else {
-            views.setViewVisibility(R.id.my_linear_layout, View.GONE)
-            views.setViewVisibility(R.id.my_linear_layout1, View.VISIBLE)    
+
+        val sharedPreference = getvalue(context,"${listofmap[position]}data")
+       
+        val mapString = sharedPreference.split("|")[0] 
+        val mapType = object : TypeToken<Map<String, Any>>() {}.type
+        val gson = Gson()
+        val map: Map<String, Any> = gson.fromJson(mapString, mapType)
+        
+        val switchValue = map["switch"] as? Boolean 
+        if(switchValue == true){
+            val typeValue = map["type"] as? String 
+            when (typeValue) {
+                "measurable" -> {
+                    views.setViewVisibility(R.id.my_linear_layout, View.VISIBLE)
+                    views.setViewVisibility(R.id.my_linear_layout1, View.GONE)
+                    views.setViewVisibility(R.id.my_linear_layout2, View.GONE)
+                }
+                "yesOrno" -> {
+                    views.setViewVisibility(R.id.my_linear_layout, View.GONE)
+                    views.setViewVisibility(R.id.my_linear_layout1, View.VISIBLE)
+                    views.setViewVisibility(R.id.my_linear_layout2, View.GONE)
+                }  
+            }
         }
+        else{
+            views.setViewVisibility(R.id.my_linear_layout, View.GONE)    
+            views.setViewVisibility(R.id.my_linear_layout1, View.GONE)
+            views.setViewVisibility(R.id.my_linear_layout2, View.VISIBLE)
+        }
+
         views.setTextViewText(R.id.appwidget_text, listofmap[position])
         views.setTextViewText(R.id.appwidget_text1, listofmap[position])
         views.setTextViewText(R.id.text_counter, value.toString())

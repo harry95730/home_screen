@@ -4,21 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:suraj/functions/home_widget_data_functions.dart';
 import 'package:flutter/services.dart';
+import 'package:suraj/pages/counter.dart';
 
 class SingleItem extends StatefulWidget {
   final String name;
   final ScrollController controller;
+  final bool changed;
   const SingleItem({
     super.key,
     required this.name,
     required this.controller,
+    required this.changed,
   });
 
   @override
   State<SingleItem> createState() => _SingleItemState();
 }
 
-class _SingleItemState extends State<SingleItem> {
+class _SingleItemState extends State<SingleItem> with WidgetsBindingObserver {
   Map<String, dynamic> individualhabitmapdata = {};
   List<String> keys = [];
   bool isloading = true;
@@ -27,6 +30,7 @@ class _SingleItemState extends State<SingleItem> {
     super.initState();
     dateandtime();
     previousdata();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   void dateandtime() {
@@ -115,6 +119,33 @@ class _SingleItemState extends State<SingleItem> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      setState;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    dateandtime();
+    previousdata();
+    WidgetsBinding.instance.addObserver(this);
+    // This method will be called whenever dependencies change
+    // You can perform operations based on the changes here
+    // For example, you can access InheritedWidgets using context
+    // Or perform some data updates based on changes in ancestor widgets
+    // Update some data when dependencies change
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 2 * MediaQuery.of(context).size.width / 3,
@@ -132,19 +163,26 @@ class _SingleItemState extends State<SingleItem> {
                   : widget.name == ''
                       ? Text(keys[index])
                       : individualhabitmapdata[keys[index]] is int
-                          ? InkWell(
-                              onTap: () async {
-                                await dialogueboxForMeasurable(context, index,
-                                    individualhabitmapdata[keys[index]]);
-                              },
-                              child: SizedBox(
-                                width: 50,
-                                child: Center(
-                                  child: Text(
-                                      '${individualhabitmapdata[keys[index]]}'),
-                                ),
-                              ),
-                            )
+                          ? index == 0 &&
+                                  individualhabitmapdata[keys[index]] is int
+                              ? FutureBuilder<int>(
+                                  future: value(widget.name),
+                                  builder: (_, snapshot) => InkWell(
+                                    onTap: () async {
+                                      await dialogueboxForMeasurable(
+                                          context, index, snapshot.data ?? 0);
+                                    },
+                                    child: SizedBox(
+                                      width: 50,
+                                      child: Center(
+                                        child: Text(
+                                          (snapshot.data ?? 0).toString(),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Text('${individualhabitmapdata[keys[index]]}')
                           : individualhabitmapdata[keys[index]] is bool &&
                                   individualhabitmapdata[keys[index]]
                               ? InkWell(
